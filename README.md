@@ -1,5 +1,10 @@
 # Fargate ECR (Docker) Open Telemetry Collector
 
+To run most of the commands below, you will need to have the AWS CLI installed and be authenticated.
+- Use `aws configure` and/or `aws sso login --profile <profile_name>` to authenticate
+- Set your environment property `AWS_PROFILE` to the same profile you used for SSO
+  - Powershell: `$Env:AWS_PROFILE="<profile_name>"`
+
 ## Helpful Commands
 - Create Terraform S3 Bucket: `aws s3 mb s3://fargate-ecr-otel-poc-tfstate --region us-east-1`
 - Create ECR Repo: `aws ecr create-repository --repository-name otel-collector --region us-east-1`
