@@ -1,3 +1,7 @@
+locals {
+  ecr_image = "${var.aws_account}.dkr.ecr.${var.aws_region}.amazonaws.com/otel-collector:latest"
+}
+
 terraform {
   required_providers {
     aws = {
@@ -126,7 +130,7 @@ resource aws_ecs_task_definition otel_task {
   task_role_arn = aws_iam_role.task_role.arn
   container_definitions = jsonencode([{
       name = "otel-collector",
-      image = var.ecr_image,
+      image = local.ecr_image,
       essential = true,
       portMappings = [
         { containerPort = 4317, protocol = "tcp" }, # gRPC endpoint
