@@ -56,7 +56,7 @@ resource aws_ecs_cluster otel_cluster {
 }
 
 resource aws_cloudwatch_log_group otel_log_group {
-  name              = "otel-collector-logs"
+  name              = "fargate-ecr-otel-poc-logs"
   retention_in_days = 1
 }
 

@@ -32,4 +32,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [awscloudwatchlogs]
+      exporters: [debug, awscloudwatchlogs]
