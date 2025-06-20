@@ -1,0 +1,35 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+
+exporters:
+  debug:
+    verbosity: detailed
+
+  awsemf: #AWS (CloudWatch) Embedded Metric Format
+    region: us-east-1
+    namespace: "fargate-ecr-otel-poc-metrics"
+    endpoint: "" # leave blank to use default AWS endpoint
+
+  awscloudwatchlogs:
+    region: us-east-1
+    log_group_name: "fargate-ecr-otel-poc-logs"
+    log_stream_name: "fargate-ecr-otel-poc-stream"
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [awsemf]
+
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [awscloudwatchlogs]
