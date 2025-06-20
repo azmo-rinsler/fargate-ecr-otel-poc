@@ -9,8 +9,8 @@ processors:
   batch:
 
 exporters:
-  debug:
-    verbosity: detailed
+#  debug:
+#    verbosity: detailed
 
   awsemf: #AWS (CloudWatch) Embedded Metric Format
     region: us-east-1
@@ -32,4 +32,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug, awscloudwatchlogs]
+      exporters: [awscloudwatchlogs]

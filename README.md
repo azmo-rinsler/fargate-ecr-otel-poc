@@ -4,6 +4,9 @@ To run most of the commands below, you will need to have the AWS CLI installed a
 - Use `aws configure` and/or `aws sso login --profile <profile_name>` to authenticate
 - Set your environment property `AWS_PROFILE` to the same profile you used for SSO
   - Powershell: `$Env:AWS_PROFILE="<profile_name>"`
+  - Bash: `export AWS_PROFILE="<profile_name>"`
+
+To run the Docker commands, you will need to have Docker installed and running.
 
 ## Helpful Commands
 - Create Terraform S3 Bucket: `aws s3 mb s3://fargate-ecr-otel-poc-tfstate --region us-east-1`
