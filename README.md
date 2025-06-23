@@ -8,6 +8,8 @@ To run most of the commands below, you will need to have the AWS CLI installed a
 
 To run the Docker commands, you will need to have Docker installed and running.
 
+You will typically want to build, tag and push the Docker image to ECR before deploying it to Fargate (do the Terraform stuff second).
+
 ## Helpful Commands
 - Create Terraform S3 Bucket: `aws s3 mb s3://fargate-ecr-otel-poc-tfstate --region us-east-1`
 - Create ECR Repo: `aws ecr create-repository --repository-name otel-collector --region us-east-1`
