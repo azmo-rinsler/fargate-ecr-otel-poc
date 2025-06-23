@@ -16,6 +16,13 @@ You will typically want to build, tag and push the Docker image to ECR before de
 - Update Fargate (after updating ECR image): `aws ecs update-service --cluster otel-collector-cluster --service otel-collector-service --force-new-deployment`
 - Send test log (must have otel-cli): `otel-cli logs --endpoint=http://<IP_ADDRESS>:4318/v1/logs --body="Test Log Message"`
 
+> [!Warning]
+> Updating the Docker image will not automatically update Fargate. 
+> You have to specifically tell it to update after pushing any changes to the image.
+> If you do this (Update Fargate), it will most likely end up with a new IP address, which you will need to update in 
+> any corresponding config files (e.g. in pacs-indexx)
+
+
 ### From the docker folder
 - Build image: `docker build -t otel-collector .`
 - Tag image: `docker tag otel-collector:latest 145612473986.dkr.ecr.us-east-1.amazonaws.com/otel-collector:latest`
