@@ -20,6 +20,6 @@ variable vpc_id {
   type = string
 }
 
-variable vpc_cidr_ranges {
+variable cidr_ranges {
   type = list(string)
 }

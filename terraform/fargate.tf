@@ -7,14 +7,14 @@ resource aws_security_group otel_sg {
     from_port       = 4318
     to_port         = 4318
     protocol        = "tcp"
-    cidr_blocks     = var.vpc_cidr_ranges
+    cidr_blocks     = var.cidr_ranges
   }
   ingress {
     description     = "Allow OTLP gRPC"
     from_port       = 4317
     to_port         = 4317
     protocol        = "tcp"
-    cidr_blocks     = var.vpc_cidr_ranges
+    cidr_blocks     = var.cidr_ranges
   }
   egress {
     description     = "Allow all outbound traffic"

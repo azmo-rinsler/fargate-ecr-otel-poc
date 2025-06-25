@@ -8,4 +8,4 @@ vpc_id = ""
 subnets = ["", ""]
 
 # CIDR block(s) to allow for ingress
-vpc_cidr_ranges = ["0.0.0.0/0"] # all 0's opens up to everything
+cidr_ranges = ["0.0.0.0/0"] # all 0's opens up to everything
