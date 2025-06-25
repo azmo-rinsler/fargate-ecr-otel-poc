@@ -22,6 +22,9 @@ exporters:
     log_group_name: "fargate-ecr-otel-poc-logs"
     log_stream_name: "fargate-ecr-otel-poc-stream"
 
+  awsxray:
+    region: us-east-1
+
 service:
   pipelines:
     metrics:
@@ -33,3 +36,8 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [awscloudwatchlogs]
+
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [awsxray]

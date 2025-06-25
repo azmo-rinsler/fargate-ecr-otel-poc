@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Vars
-AWS_REGION="us-east-1"
-AWS_ACCOUNT="145612473986" # EA Nonprod
-ECR_REPO_NAME="otel-collector"
-ECR_IMG_TAG="latest"
+AWS_REGION="${AWS_REGION:-"us-east-1"}"
+AWS_ACCOUNT="${AWS_ACCOUNT:-"145612473986"}" # EA Nonprod
+ECR_REPO_NAME="${ECR_REPO_NAME:-"otel-collector"}"
+ECR_IMG_TAG="${ECR_IMG_TAG:-"latest"}"
 
 # Derived Vars
 ECR_URI="${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}"

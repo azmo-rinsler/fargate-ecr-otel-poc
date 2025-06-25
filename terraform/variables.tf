@@ -7,6 +7,11 @@ variable aws_account {
   type = string
 }
 
+variable ecr_repo_name {
+  type = string
+  default = "otel-collector"
+}
+
 variable subnets {
   type = list(string)
 }
