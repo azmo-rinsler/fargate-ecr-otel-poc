@@ -138,6 +138,6 @@ resource aws_ecs_service otel_service {
   network_configuration {
     subnets                     = var.subnets
     security_groups             = [aws_security_group.otel_sg.id]
-    assign_public_ip            = true
+    assign_public_ip            = false
   }
 }

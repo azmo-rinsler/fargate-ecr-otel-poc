@@ -32,4 +32,4 @@ You will typically want to build, tag and push the Docker image to ECR before de
 ### From the terraform folder
 - terraform init
 - terraform plan
-- terraform apply -auto-approve
+- terraform apply -auto-approve -var-file="nonprod.tfvars"
