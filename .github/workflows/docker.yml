@@ -34,7 +34,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: docker
+        working-directory: ./docker
 
     steps:
       # Uses OIDC for auth, requires the ARN a trusted role in AWS IAM to be set up in advance of running this workflow
