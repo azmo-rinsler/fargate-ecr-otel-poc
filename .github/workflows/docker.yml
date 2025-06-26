@@ -37,6 +37,8 @@ jobs:
         working-directory: ./docker
 
     steps:
+      - uses: actions/checkout@main
+
       # Uses OIDC for auth, requires the ARN a trusted role in AWS IAM to be set up in advance of running this workflow
       # Note: this step will fail if the role does not exist BEFORE running the workflow.
       #       creating/updating this role can be done either manually or via CloudFormation template
@@ -73,10 +75,8 @@ jobs:
         run: |
           echo "ECR_IMG_TAG to be used is: ${{ env.ECR_IMG_TAG }}"
 
-      - uses: actions/checkout@main
-
       # makes sure we have permission to execute the script
-      - run: chmod +x deploy-docker.sh
+      # - run: chmod +x deploy-docker.sh
 
       - name: Run deploy script
         run: ./deploy-docker.sh
