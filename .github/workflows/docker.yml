@@ -1,0 +1,79 @@
+name: Docker Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        required: true
+        type: choice
+        options:
+          - nonprod
+      version:
+        description: Optional Version Tag to use when pushing image to ECR. If none is specified, the build will attempt to auto-increment to the next available major version.
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  otel_collector:
+    name: Docker Workflow
+    timeout-minutes: 10 # this build currently takes about 2 minutes on average, so 10 minutes should be plenty of time
+    runs-on: ubuntu-22.04
+
+    env:
+      AWS_ACCOUNT: ${{ vars.AWS_ACCOUNT }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      ECR_IMG_TAG: ${{ inputs.version }}
+      ECR_REPO_NAME: ${{ vars.ECR_REPO_NAME }}
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      # Uses OIDC for auth, requires the ARN a trusted role in AWS IAM to be set up in advance of running this workflow
+      # Note: this step will fail if the role does not exist BEFORE running the workflow.
+      #       creating/updating this role can be done either manually or via CloudFormation template
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          # pre-existing role from included CloudFormation (or elsewhere) - parameterized in case name changes by env
+          role-to-assume: 'arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/${{ vars.AWS_IAM_ROLE }}'
+
+      - name: Login to ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.AWS_ACCOUNT }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+
+      # Double check to make sure we can access ECR by listing existing image tags
+      - if: ${{ env.ECR_IMG_TAG == '' }}
+        name: Get and increment version tag
+        run: |
+          echo "Listing existing image tags in ECR for the ${{ env.ECR_REPO_NAME }} repository:"
+          VERSION_TAGS=$(aws ecr list-images --repository-name ${{ env.ECR_REPO_NAME }} --region ${{ env.AWS_REGION }} --query 'imageIds[].imageTag' --output text)
+          VERSION_ARRAY=($VERSION_TAGS)
+          VERSION_SORTED=($(echo "${VERSION_ARRAY[@]}" | tr ' ' '\n' | sort -r))
+          LATEST_VERSION=${VERSION_SORTED[0]}
+          LATEST_VERSION_SPLIT=($(echo $LATEST_VERSION | tr '.' '\n'))
+          LATEST_MAJOR_VERSION=${LATEST_VERSION_SPLIT[0]}
+          echo "All versions: ${VERSION_SORTED[@]}"
+          echo "Latest version appears to be ${LATEST_VERSION}. Is this correct?"
+          echo "Assuming latest major version to be: ${LATEST_MAJOR_VERSION}"
+          echo "Incremented version will be: $((++LATEST_MAJOR_VERSION))"
+          echo "ECR_IMG_TAG=${LATEST_MAJOR_VERSION}" >> "$GITHUB_ENV"
+
+      - name: Print version tag to be used for image
+        run: |
+          echo "ECR_IMG_TAG to be used is: ${{ env.ECR_IMG_TAG }}"
+
+      - uses: actions/checkout@main
+
+      - name: Run deploy script
+        working-directory: docker
+        run: ./deploy-docker.sh
