@@ -34,6 +34,7 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: docker
 
     steps:
       # Uses OIDC for auth, requires the ARN a trusted role in AWS IAM to be set up in advance of running this workflow
@@ -74,6 +75,8 @@ jobs:
 
       - uses: actions/checkout@main
 
+      # makes sure we have permission to execute the script
+      - run: chmod +x build-docker.sh
+
       - name: Run deploy script
-        working-directory: docker
         run: ./deploy-docker.sh
