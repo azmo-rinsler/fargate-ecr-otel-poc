@@ -80,3 +80,7 @@ jobs:
 
       - name: Run deploy script
         run: ./deploy-docker.sh
+
+      # Force update ECS service to pick up the new image from ECR
+      - name: Force Update ECS
+        run: aws ecs update-service --cluster otel-collector-cluster --service otel-collector-service --force-new-deployment
