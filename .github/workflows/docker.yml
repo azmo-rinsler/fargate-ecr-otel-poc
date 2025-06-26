@@ -76,7 +76,7 @@ jobs:
           echo "ECR_IMG_TAG to be used is: ${{ env.ECR_IMG_TAG }}"
 
       # makes sure we have permission to execute the script
-      # - run: chmod +x deploy-docker.sh
+      - run: chmod +x deploy-docker.sh
 
       - name: Run deploy script
         run: ./deploy-docker.sh
