@@ -76,7 +76,7 @@ jobs:
       - uses: actions/checkout@main
 
       # makes sure we have permission to execute the script
-      - run: chmod +x build-docker.sh
+      - run: chmod +x deploy-docker.sh
 
       - name: Run deploy script
         run: ./deploy-docker.sh
