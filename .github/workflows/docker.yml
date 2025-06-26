@@ -34,7 +34,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./docker
+        working-directory: docker
 
     steps:
       - uses: actions/checkout@main
