@@ -15,10 +15,10 @@ permissions:
 
 jobs:
   otel_collector:
-    environment: ${{ inputs.environment }}
+    name: Terraform Workflow
     runs-on: ubuntu-22.04
 
-    name: Terraform Workflow
+    environment: ${{ inputs.environment }}
 
     defaults:
       run:

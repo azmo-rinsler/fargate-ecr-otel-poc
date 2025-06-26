@@ -22,9 +22,9 @@ permissions:
 jobs:
   otel_collector:
     name: Docker Workflow
-    timeout-minutes: 10 # this build currently takes about 2 minutes on average, so 10 minutes should be plenty of time
     runs-on: ubuntu-22.04
 
+    environment: ${{ inputs.environment }}
     env:
       AWS_ACCOUNT: ${{ vars.AWS_ACCOUNT }}
       AWS_REGION: ${{ vars.AWS_REGION }}
