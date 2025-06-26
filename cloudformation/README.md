@@ -11,7 +11,7 @@ You can use the AWS CLI v2 to deploy this template via the following command:
 Note: Make sure your working directory is set to the location of the `github-role.yaml` file before running the command.
 
 ```bash
-aws cloudformation deploy --stack-name GitHubOidcRoleOtel --template-file github-role.yaml --capabilities CAPABILITY_NAMED_IAM
+aws cloudformation deploy --stack-name GitHubOidcRoleOtel --template-file github-role.yaml --capabilities CAPABILITY_NAMED_IAM --parameter-overrides GitHubOrg=azmo-rinsler
 ```
 
 It may be necessary to update your AWS credentials in environment variables before the above command will work. 

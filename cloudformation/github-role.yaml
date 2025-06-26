@@ -4,7 +4,7 @@
 Parameters:
   GitHubOrg:
     Description: Name of GitHub organization/user (case sensitive)
-    Default: "idexx-labs"
+    Default: "idexx-labs" # repo happens to be under my name, so for this should actually be "azmo-rinsler"
     Type: String
   RepositoryName:
     Description: Name of GitHub repository (case sensitive)

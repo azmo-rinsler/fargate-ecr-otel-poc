@@ -37,8 +37,7 @@ jobs:
         with:
           aws-region: ${{ vars.AWS_REGION }}
           # pre-existing role from included CloudFormation (or elsewhere) - parameterized in case name changes by env
-          # role-to-assume: 'arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/${{ vars.AWS_IAM_ROLE }}'
-          role-to-assume: 'arn:aws:iam::145612473986:role/GitHubOidcRole-LynxxLogin'
+          role-to-assume: 'arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/${{ vars.AWS_IAM_ROLE }}'
 
       - name: Initialize Terraform
         run: terraform init
