@@ -1,0 +1,46 @@
+name: OTel Collector Terraform Workflow
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        required: true
+        type: choice
+        options:
+          - nonprod
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  otel_collector:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-22.04
+
+    name: Open Telemetry Collector Workflow
+
+    defaults:
+      run:
+        working-directory: terraform
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v4  # Check out repo
+      - uses: hashicorp/setup-terraform@v3 # Install Terraform
+
+      # Uses OIDC for auth, requires the ARN a trusted role in AWS IAM to be set up in advance of running this workflow
+      # Note: this step will fail if the role does not exist BEFORE running the workflow.
+      #       creating/updating this role can be done either manually or via CloudFormation template
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          # pre-existing role from included CloudFormation (or elsewhere) - parameterized in case name changes by env
+          role-to-assume: 'arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/${{ vars.AWS_IAM_ROLE }}'
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Apply Terraform
+        run : terraform apply -auto-approve -var-file="env/${{ inputs.environment }}.tfvars"

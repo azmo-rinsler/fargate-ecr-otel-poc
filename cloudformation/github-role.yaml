@@ -1,0 +1,72 @@
+# This CloudFormation template based on:
+# - https://github.com/aws-actions/configure-aws-credentials
+# - https://d38mtn6aq9zhn6.cloudfront.net/configure-aws-credentials-latest.yml
+Parameters:
+  GitHubOrg:
+    Description: Name of GitHub organization/user (case sensitive)
+    Default: "idexx-labs"
+    Type: String
+  RepositoryName:
+    Description: Name of GitHub repository (case sensitive)
+    Default: "fargate-ecr-otel-poc"
+    Type: String
+  OIDCProviderArn:
+    Description: Arn for the GitHub OIDC Provider. (optional)
+    Default: ""
+    Type: String
+  OIDCAudience:
+    Description: Audience supplied to configure-aws-credentials.
+    Default: "sts.amazonaws.com"
+    Type: String
+
+Conditions:
+  CreateOIDCProvider: !Equals
+    - !Ref OIDCProviderArn
+    - ""
+
+Resources:
+  GitHubOIDCRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: GitHubOidcRoleOtel
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: [ sts:AssumeRoleWithWebIdentity ]
+            Principal:
+              Federated: !If
+                - CreateOIDCProvider
+                 # arn of the GitHub identity provider in the target AWS Account
+                - !Sub "arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com"
+                - !Ref OIDCProviderArn
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: !Ref OIDCAudience
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/${RepositoryName}:*
+
+      Policies:
+        - PolicyName: GitHubOIDCCloudFormationPolicy
+          PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - "*"
+                  Resource: "*"
+
+# An identity provider such as this one should (and likely does) already exist in the AWS account.
+# (this is commented out because the providers are unique and attempting to recreate it like this will likely fail)
+#  GithubOidc:
+#    Type: AWS::IAM::OIDCProvider
+#    Condition: CreateOIDCProvider
+#    Properties:
+#      Url: https://token.actions.githubusercontent.com
+#      ClientIdList:
+#        - sts.amazonaws.com
+#      ThumbprintList: # These F's are not to pay respects - they are a "magic" value that only works for GitHub OIDC
+#        - ffffffffffffffffffffffffffffffffffffffff
+
+Outputs:
+  GitHubOIDCRole:
+    Value: !GetAtt GitHubOIDCRole.Arn
