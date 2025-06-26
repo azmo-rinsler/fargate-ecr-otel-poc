@@ -1,4 +1,4 @@
-name: OTel Collector Terraform Workflow
+name: Terraform Workflow
 on:
   workflow_dispatch:
     inputs:
@@ -18,7 +18,7 @@ jobs:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
 
-    name: Open Telemetry Collector Workflow
+    name: Terraform Workflow
 
     defaults:
       run:
