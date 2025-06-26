@@ -32,7 +32,9 @@ Resources:
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
-            Action: [ sts:AssumeRoleWithWebIdentity ]
+            Action: [
+              sts:AssumeRoleWithWebIdentity
+            ]
             Principal:
               Federated: !If
                 - CreateOIDCProvider
@@ -43,7 +45,7 @@ Resources:
               StringEquals:
                 token.actions.githubusercontent.com:aud: !Ref OIDCAudience
               StringLike:
-                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/${RepositoryName}:*
+                token.actions.githubusercontent.com:sub: !Sub "repo:${GitHubOrg}/${RepositoryName}:*"
 
       Policies:
         - PolicyName: GitHubOIDCCloudFormationPolicy
