@@ -1,6 +1,7 @@
 # # NOTE: According to ChatGPT, App Runner does not currently have good support for CloudFormation OR Terraform!
 # #       This section is commented out because I'm not sure how to do things like enable observability via IaC.
 # #       (but probably the best IaC approach would be to use the AWS CDK)
+
 # # IAM Role for App Runner to access ECR
 # resource aws_iam_role ecr_otel_poc_app_runner_access {
 #   name = "apprunner-ecr-access-role"

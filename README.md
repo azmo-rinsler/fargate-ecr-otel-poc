@@ -10,6 +10,11 @@ To run the Docker commands, you will need to have Docker installed and running.
 
 You will typically want to build, tag and push the Docker image to ECR before deploying it to Fargate (do the Terraform stuff second).
 
+> [!Note]
+> The `cloudformation` folder contains a template to create an IAM role for GitHub OIDC authentication, required by this 
+> repo in order for its GitHub Actions workflows to work. You must run that template at least once (locally), to create 
+> the appropriate corresponding role, before you can use the GitHub Actions workflows in this repo.
+
 ## Helpful Commands
 - Create Terraform S3 Bucket: `aws s3 mb s3://fargate-ecr-otel-poc-tfstate --region us-east-1`
 - Create ECR Repo: `aws ecr create-repository --repository-name otel-collector --region us-east-1`
