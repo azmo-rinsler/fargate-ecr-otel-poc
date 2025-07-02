@@ -15,8 +15,8 @@ processors:
       - key: deployment.environment
         from_attribute: deployment.environment
         action: upsert
-  resource_to_telemetry_conversion:
-    enabled: true
+#  resource_to_telemetry_conversion:
+#    enabled: true
 
 exporters:
 #  debug:
