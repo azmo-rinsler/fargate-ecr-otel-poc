@@ -15,9 +15,6 @@ exporters:
   awsemf: #AWS (CloudWatch) Embedded Metric Format
     region: us-east-1
     namespace: "fargate-ecr-otel-poc-metrics"
-  # endpoint: "" # leave blank to use default AWS endpoint
-    resource_to_telemetry_conversion:
-      enabled: true
 
   awscloudwatchlogs:
     region: us-east-1
