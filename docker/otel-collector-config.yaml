@@ -7,6 +7,16 @@ receivers:
 
 processors:
   batch:
+#  resource:
+#    attributes:
+#      - key: service.name
+#        from_attribute: service.name
+#        action: upsert
+#      - key: deployment.environment
+#        from_attribute: deployment.environment
+#        action: upsert
+  resource_to_telemetry_conversion:
+    enabled: true
 
 exporters:
 #  debug:
@@ -28,7 +38,7 @@ service:
   pipelines:
     metrics:
       receivers: [otlp]
-      processors: [batch]
+      processors: [batch, resource_to_telemetry_conversion]
       exporters: [awsemf]
 
     logs:
