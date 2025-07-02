@@ -14,13 +14,15 @@ echo "Building Docker image"
 docker build -t ${ECR_REPO_NAME} .
 
 echo "Tagging image"
-docker tag ${ECR_URI}:${ECR_IMG_TAG} ${ECR_REPO_NAME}:latest
+docker tag ${ECR_REPO_NAME}:latest ${ECR_URI}:${ECR_IMG_TAG}
 
 echo "Authenticating to ECR"
 aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com
 
 echo "Pushing image to ECR"
-docker push ${ECR_URI}:${ECR_IMG_TAG}
-docker push ${ECR_REPO_NAME}:latest
+if [ ${ECR_IMG_TAG} != "latest" ]; then
+  docker push ${ECR_URI}:${ECR_IMG_TAG}
+fi
+docker push ${ECR_URI}:latest
 
 echo "All done!"
