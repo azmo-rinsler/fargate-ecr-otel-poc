@@ -14,16 +14,13 @@ exporters:
 
   awsemf: #AWS (CloudWatch) Embedded Metric Format
     region: us-east-1
-    namespace: "fargate-ecr-otel-poc-metrics"
-    log_group_name: "fargate-ecr-otel-poc-metrics"
-    dimension_rollup_option: NoDimensionRollup
-    resource_to_telemetry_conversion:
-      enabled: true
+    namespace: fargate-ecr-otel-poc-metrics
+    log_group_name: fargate-ecr-otel-poc-metrics
 
   awscloudwatchlogs:
     region: us-east-1
-    log_group_name: "fargate-ecr-otel-poc-logs"
-    log_stream_name: "fargate-ecr-otel-poc-stream"
+    log_group_name: fargate-ecr-otel-poc-logs
+    log_stream_name: fargate-ecr-otel-poc-stream
 
   awsxray:
     region: us-east-1
