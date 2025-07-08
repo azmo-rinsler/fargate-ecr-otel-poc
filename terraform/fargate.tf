@@ -151,7 +151,7 @@ resource aws_ecs_service otel_service {
 
 resource aws_lb otel_lb {
   name               = "otel-collector-lb"
-  internal           = false
+  internal           = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.otel_sg.id]
   subnets            = var.subnets
