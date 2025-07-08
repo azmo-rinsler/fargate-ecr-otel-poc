@@ -181,7 +181,7 @@ resource aws_lb_target_group otel_lb_tg {
 
 resource aws_lb_listener otel_lb_listener {
   load_balancer_arn = aws_lb.otel_lb.arn
-  port              = 80
+  port              = 4318 # HTTP (Protobuf)
   protocol          = "HTTP"
   default_action {
     type             = "forward"
