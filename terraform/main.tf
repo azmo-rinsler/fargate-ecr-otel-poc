@@ -1,5 +1,5 @@
 locals {
-  ecr_image = "${var.aws_account}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.ecr_repo_name}:latest"
+  ecr_image = "${var.aws_account}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.ecr_repo_name}:${var.ecr_repo_version}"
 }
 
 terraform {

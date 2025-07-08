@@ -12,6 +12,11 @@ variable ecr_repo_name {
   default = "otel-collector"
 }
 
+variable ecr_repo_version {
+  type = string
+  default = "latest"
+}
+
 variable subnets {
   type = list(string)
 }
