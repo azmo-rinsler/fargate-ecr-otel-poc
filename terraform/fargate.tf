@@ -133,11 +133,58 @@ resource aws_ecs_service otel_service {
   name                          = "otel-collector-service"
   cluster                       = aws_ecs_cluster.otel_cluster.id
   task_definition               = aws_ecs_task_definition.otel_task.arn
-  desired_count                 = 1
+  desired_count                 = 2
   launch_type                   = "FARGATE"
   network_configuration {
     subnets                     = var.subnets
     security_groups             = [aws_security_group.otel_sg.id]
     assign_public_ip            = false
+  }
+
+// todo - debug stuff below this point
+  load_balancer {
+    target_group_arn = aws_lb_target_group.otel_lb_tg.arn
+    container_name = "otel-collector"
+    container_port = 4318 # HTTP (Protobuf)
+  }
+}
+
+resource aws_lb otel_lb {
+  name               = "otel-collector-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.otel_sg.id]
+  subnets            = var.subnets
+  tags = {
+    Name = "otel-collector-lb"
+  }
+}
+
+resource aws_lb_target_group otel_lb_tg {
+  name     = "otel-collector-lb-target-group"
+  port     = 4318 # HTTP (Protobuf)
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+  target_type = "ip"
+  health_check {
+    protocol            = "HTTP"
+    path                = "/"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+  tags = {
+    Name = "otel-collector-lb-target-group"
+  }
+}
+
+resource aws_lb_listener otel_lb_listener {
+  load_balancer_arn = aws_lb.otel_lb.arn
+  port              = 80
+  protocol          = "HTTP"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.otel_lb_tg.arn
   }
 }
