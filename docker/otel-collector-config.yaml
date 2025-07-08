@@ -1,7 +1,13 @@
+extensions:
+  # health check is used by load balancers and the like to determine if the collector is running and healthy
+  health_check:
+    endpoint: 0.0.0.0:13133
+
 receivers:
   otlp:
     protocols:
       grpc:
+        endpoint: 0.0.0.0:4317
       http:
         endpoint: 0.0.0.0:4318
 

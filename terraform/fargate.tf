@@ -167,9 +167,8 @@ resource aws_lb_target_group otel_lb_tg {
   vpc_id   = var.vpc_id
   target_type = "ip"
   health_check {
-    protocol            = "TCP"
-    path                = "/"
-    port                = "4318" # HTTP (Protobuf)
+    protocol            = "HTTP"
+    port                = 13133 # otel collector's default health check port
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2
@@ -190,21 +189,21 @@ resource aws_lb_listener otel_lb_listener {
   }
 }
 
-# manually created this zone via the AWS console - using data source to reference it from here (within the Terraform)
-data aws_route53_zone ea_nonprod_zone {
-  name         = "ea-nonprod.idexx.com"
-  private_zone = false
-}
-
-# this record creates an intelligible DNS name for our OpenTelemetry Collector's load balancer, so we don't have to
-# rely on the auto-generated DNS name that AWS provides
-resource aws_route53_record otel_alias {
-  zone_id = data.aws_route53_zone.ea_nonprod_zone.zone_id
-  name    = "otel-collector"
-  type    = "A"
-  alias {
-    name                   = aws_lb.otel_lb.dns_name
-    zone_id                = aws_lb.otel_lb.zone_id
-    evaluate_target_health = true
-  }
-}
+# # manually created this zone via the AWS console - using data source to reference it from here (within the Terraform)
+# data aws_route53_zone ea_nonprod_zone {
+#   name         = "ea-nonprod.idexx.com"
+#   private_zone = false
+# }
+#
+# # this record creates an intelligible DNS name for our OpenTelemetry Collector's load balancer, so we don't have to
+# # rely on the auto-generated DNS name that AWS provides
+# resource aws_route53_record otel_alias {
+#   zone_id = data.aws_route53_zone.ea_nonprod_zone.zone_id
+#   name    = "otel-collector"
+#   type    = "A"
+#   alias {
+#     name                   = aws_lb.otel_lb.dns_name
+#     zone_id                = aws_lb.otel_lb.zone_id
+#     evaluate_target_health = true
+#   }
+# }
