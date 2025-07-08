@@ -200,7 +200,6 @@ resource aws_lb_listener otel_lb_listener {
 # manually created this zone via the AWS console - using data source to reference it from here (within the Terraform)
 data aws_route53_zone ea_nonprod_zone {
   name         = "ea-nonprod.idexx.com"
-  private_zone = true
 }
 
 # this record creates an intelligible DNS name for our OpenTelemetry Collector's load balancer, so we don't have to
