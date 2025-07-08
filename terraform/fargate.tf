@@ -188,3 +188,22 @@ resource aws_lb_listener otel_lb_listener {
     target_group_arn = aws_lb_target_group.otel_lb_tg.arn
   }
 }
+
+# manually created this zone via the AWS console - using data source to reference it from here (within the Terraform)
+data aws_route53_zone ea_nonprod_zone {
+  name         = "ea-nonprod.idexx.com"
+  private_zone = false
+}
+
+# this record creates an intelligible DNS name for our OpenTelemetry Collector's load balancer, so we don't have to
+# rely on the auto-generated DNS name that AWS provides
+resource aws_route53_record otel_alias {
+  zone_id = data.aws_route53_zone.ea_nonprod_zone.zone_id
+  name    = "otel-collector"
+  type    = "A"
+  alias {
+    name                   = aws_lb.otel_lb.dns_name
+    zone_id                = aws_lb.otel_lb.zone_id
+    evaluate_target_health = true
+  }
+}
