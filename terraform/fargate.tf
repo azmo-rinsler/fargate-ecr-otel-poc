@@ -169,6 +169,7 @@ resource aws_lb_target_group otel_lb_tg {
   health_check {
     protocol            = "HTTP"
     path                = "/"
+    port                = 4318 # HTTP (Protobuf)
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2
