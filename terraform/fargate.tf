@@ -167,7 +167,7 @@ resource aws_lb_target_group otel_lb_tg {
   vpc_id   = var.vpc_id
   target_type = "ip"
   health_check {
-    protocol            = "HTTP"
+    protocol            = "TCP"
     path                = "/"
     port                = 4318 # HTTP (Protobuf)
     interval            = 30
