@@ -38,3 +38,10 @@ You will typically want to build, tag and push the Docker image to ECR before de
 - terraform init -backend-config="backend/nonprod.config"
 - terraform plan
 - terraform apply -auto-approve -var-file="env/nonprod.tfvars"
+
+> [!Note]
+> The Terraform for this project expects a hosted zone to _already_ exist in Route53. The exact name depends on environment.
+> If you are manually creating a new hosted zone (to run this project in a non-EA-Nonprod account); make sure to also 
+> create a ServiceNow ticket to Network Ops requesting it as a new DNS Zone Delegation. Include the NS entries from the 
+> hosted zone as part of the ticket description. You may also want to request an ACM certificate for the domain as well, 
+> if you plan to do anything that might require one (such as HTTPS).
