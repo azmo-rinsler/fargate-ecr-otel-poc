@@ -1,3 +1,5 @@
+environment = "ea-nonprod"
+
 # EA Nonprod account
 aws_account = "145612473986"
 

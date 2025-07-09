@@ -1,4 +1,5 @@
 # NOTE: This file is meant more as an example or template - check the env folder for "actual" values.
+environment = ""
 
 # AWS Account ID
 aws_account = ""
