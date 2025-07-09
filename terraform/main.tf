@@ -9,11 +9,11 @@ terraform {
       version       = "~> 5.97.0"
     }
   }
+  # set this during initialization using `terraform init -backend-config="backend/nonprod.config"`
   backend s3 {
-    bucket          = "fargate-ecr-otel-poc-tfstate"
-    key             = "terraform.tfstate"
-    region          = "us-east-1"
-    encrypt         = false
+    bucket          = ""
+    key             = ""
+    region          = ""
   }
 }
 

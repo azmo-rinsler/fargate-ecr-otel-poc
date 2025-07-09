@@ -35,6 +35,6 @@ You will typically want to build, tag and push the Docker image to ECR before de
 - Push image: `docker push 145612473986.dkr.ecr.us-east-1.amazonaws.com/otel-collector:latest`
 
 ### From the terraform folder
-- terraform init
+- terraform init -backend-config="backend/nonprod.config"
 - terraform plan
 - terraform apply -auto-approve -var-file="env/nonprod.tfvars"

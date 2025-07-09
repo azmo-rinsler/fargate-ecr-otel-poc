@@ -148,8 +148,6 @@ resource aws_ecs_service otel_service {
     security_groups             = [aws_security_group.otel_sg.id]
     assign_public_ip            = false
   }
-
-// todo - debug stuff below this point
   load_balancer {
     target_group_arn = aws_lb_target_group.otel_lb_tg.arn
     container_name = "otel-collector"
