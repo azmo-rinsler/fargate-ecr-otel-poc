@@ -63,11 +63,11 @@ jobs:
           VERSION_ARRAY=($VERSION_TAGS)
           VERSION_SORTED=($(echo "${VERSION_ARRAY[@]}" | tr ' ' '\n' | sort -r))
           LATEST_VERSION=${VERSION_SORTED[0]}
+          if [[ "$LATEST_VERSION"="latest" ]]; then
+            LATEST_VERSION=${VERSION_SORTED[1]}
+          fi
           LATEST_VERSION_SPLIT=($(echo $LATEST_VERSION | tr '.' '\n'))
           LATEST_MAJOR_VERSION=${LATEST_VERSION_SPLIT[0]}
-          if [[ "$LATEST_MAJOR_VERSION"="latest" ]]; then
-            LATEST_MAJOR_VERSION=${LATEST_VERSION_SPLIT[1]}
-          fi
           echo "All versions: ${VERSION_SORTED[@]}"
           echo "Latest version appears to be ${LATEST_VERSION}. Is this correct?"
           echo "Assuming latest major version to be: ${LATEST_MAJOR_VERSION}"
