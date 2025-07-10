@@ -40,7 +40,7 @@ resource aws_ecs_cluster otel_cluster {
 }
 
 resource aws_cloudwatch_log_group otel_log_group {
-  name              = "fargate-ecr-otel-poc-logs"
+  name              = "otel-log-group"
   retention_in_days = 1
 }
 
@@ -167,7 +167,7 @@ resource aws_lb otel_lb {
 }
 
 resource aws_lb_target_group otel_lb_tg {
-  name     = "otel-collector-lb-target-group"
+  name     = "otel-collector-lb-tg"
   port     = 4318 # HTTP (Protobuf)
   protocol = "HTTP"
   vpc_id   = var.vpc_id
@@ -181,7 +181,7 @@ resource aws_lb_target_group otel_lb_tg {
     unhealthy_threshold = 2
   }
   tags = {
-    Name = "otel-collector-lb-target-group"
+    Name = "otel-collector-lb-tg"
   }
 }
 
