@@ -21,12 +21,11 @@ exporters:
   awsemf: #AWS (CloudWatch) Embedded Metric Format
     region: us-east-1
     namespace: open-telemetry/metrics
-    log_group_name: open-telemetry/metrics
 
   awscloudwatchlogs:
     region: us-east-1
     log_group_name: open-telemetry/logs
-    log_stream_name: opten-telemetry/logs/stream
+    log_stream_name: open-telemetry/logs/stream
 
   awsxray:
     region: us-east-1
