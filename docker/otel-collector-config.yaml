@@ -20,13 +20,13 @@ exporters:
 
   awsemf: #AWS (CloudWatch) Embedded Metric Format
     region: us-east-1
-    namespace: fargate-ecr-otel-poc-metrics
-    log_group_name: fargate-ecr-otel-poc-metrics
+    namespace: open-telemetry/metrics
+    log_group_name: open-telemetry/metrics
 
   awscloudwatchlogs:
     region: us-east-1
-    log_group_name: fargate-ecr-otel-poc-logs
-    log_stream_name: fargate-ecr-otel-poc-stream
+    log_group_name: open-telemetry/logs
+    log_stream_name: opten-telemetry/logs/stream
 
   awsxray:
     region: us-east-1
