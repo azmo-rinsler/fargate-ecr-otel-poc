@@ -44,6 +44,11 @@ resource aws_cloudwatch_log_group otel_log_group {
   retention_in_days = 1
 }
 
+resource aws_cloudwatch_log_group otel_metric_group {
+  name              = "open-telemetry/metrics"
+  retention_in_days = 1
+}
+
 resource aws_iam_role execution_role {
   name = "otel-execution-role"
   assume_role_policy= jsonencode({
