@@ -1,4 +1,9 @@
 extensions:
+  zpages:
+    endpoint: ":55679"
+    expvar:
+      enabled: true
+
   # health check is used by load balancers and the like to determine if the collector is running and healthy
   health_check:
     endpoint: 0.0.0.0:13133
@@ -10,7 +15,8 @@ receivers:
         endpoint: 0.0.0.0:4318
         cors:
           allowed_origins:
-            - "*"
+            - "http://localhost:5173" # This should allow InVuer to connect from local dev environments
+            - "https://otel-collector.ea-nonprod.idexx.com" # This is the EA-Nonprod Route53 Hosted Zone Alias
           allowed_headers:
             - "*"
           max_age: 3600 # 1 hour
@@ -19,8 +25,8 @@ processors:
   batch:
 
 exporters:
-#  debug:
-#    verbosity: detailed
+  debug:
+    verbosity: detailed
 
   awsemf: #AWS (CloudWatch) Embedded Metric Format
     region: us-east-1
@@ -35,7 +41,7 @@ exporters:
     region: us-east-1
 
 service:
-  extensions: [ health_check ]
+  extensions: [health_check, zpages]
   pipelines:
     metrics:
       receivers: [otlp]

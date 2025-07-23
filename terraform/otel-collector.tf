@@ -3,11 +3,25 @@ resource aws_security_group otel_sg {
   description       = "Allow OTLP traffic"
   vpc_id            = var.vpc_id
   ingress {
+    description     = "Allow HTTP"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    cidr_blocks     = var.cidr_ranges
+  }
+  ingress {
+    description     = "Allow HTTPS"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    cidr_blocks     = var.cidr_ranges
+  }
+  ingress {
     description     = "Allow OTLP Health Checks"
     from_port       = 13133
     to_port         = 13133
     protocol        = "tcp"
-    cidr_blocks     = var.cidr_ranges
+    cidr_blocks     =  ["0.0.0.0/0"]
   }
   ingress {
     description     = "Allow OTLP HTTP"
@@ -152,6 +166,7 @@ resource aws_ecs_service otel_service {
     target_group_arn = aws_lb_target_group.otel_lb_tg.arn
     container_name = "otel-collector"
     container_port = 4318 # HTTP (Protobuf)
+
   }
 }
 
@@ -185,10 +200,35 @@ resource aws_lb_target_group otel_lb_tg {
   }
 }
 
+# Redirect HTTP to HTTPS
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.otel_lb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+# Forward HTTPS to the target group
+data aws_acm_certificate route53_cert {
+  domain   = "*.${local.route_53_zone}"
+  statuses = ["ISSUED"]
+  most_recent = true
+}
 resource aws_lb_listener otel_lb_listener {
   load_balancer_arn = aws_lb.otel_lb.arn
-  port              = 4318 # HTTP (Protobuf)
-  protocol          = "HTTP"
+  port              = 443 # Default HTTPS Port # 4318 HTTP (Protobuf)
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
+  protocol          = "HTTPS"
+  certificate_arn   = data.aws_acm_certificate.route53_cert.arn
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.otel_lb_tg.arn
